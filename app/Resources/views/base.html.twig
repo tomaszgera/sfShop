@@ -2,12 +2,25 @@
 <html>
     <head>
         <meta charset="UTF-8" />
-        <title>{% block title %}Welcome!{% endblock %}</title>
-        {% block stylesheets %}{% endblock %}
+        <title>{% block title %}Strona glowna{% endblock %}</title>
+        {% block stylesheets %}
+            <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+        {% endblock %}
         <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
+
     </head>
     <body>
+
+        <ul class="nav nav-tabs">
+            <li role="presentation" class="active"><a href="{{ path('homepage') }}">HomePage</a></li>
+            <li role="presentation"><a href="{{ path('products_list') }}">Produkty</a></li>
+            <li role="presentation"><a href="{{ path('basket') }}">Koszyk</a></li>
+         </ul>
+
         {% block body %}{% endblock %}
-        {% block javascripts %}{% endblock %}
+        {% block javascripts %}
+            <script src="//code.jquery.com/jquery-1.11.2.min.js"></script>
+            <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+        {% endblock %}
     </body>
 </html>
