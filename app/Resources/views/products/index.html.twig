@@ -1,4 +1,4 @@
-{% extends 'base.html.twig' %}
+{% extends "::base.html.twig" %}
 
 {% block title %}Produkty{% endblock %}
 
@@ -12,19 +12,24 @@
             <th>nazwa</th>
             <th>cena</th>
             <th>opis</th>
+            <th></th>
         </tr>
         </thead>
         <tbody>
 
-            {% for product in products %}
+        {% for product in products %}
             <tr>
                 <td>{{ product.id }}</td>
                 <td>{{ product.name }}</td>
                 <td>{{ product.price }}</td>
                 <td>{{ product.desc }}</td>
+                <td>
+                    <a href="{{ path('basket_add', {'id': product.id}) }}" class="btn btn-primary">Dodaj do koszyka</a>
+                </td>
             </tr>
-            {% endfor %}
+        {% endfor %}
 
         </tbody>
     </table>
+
 {% endblock %}

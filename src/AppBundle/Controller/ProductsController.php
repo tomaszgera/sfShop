@@ -1,25 +1,19 @@
 <?php
-
-
 namespace AppBundle\Controller;
-
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 
-class ProductController extends Controller
+class ProductsController extends Controller
 {
-
     /**
      * @Route("/produkty", name="products_list")
      */
-
     public function indexAction()
     {
-        return $this->render('products/index.html.twig',[
+        return $this->render('products/index.html.twig', [
             'products' => $this->getProducts(),
         ]);
     }
-
     private function getProducts()
     {
         $file = file('product.txt');
@@ -33,7 +27,6 @@ class ProductController extends Controller
                 'desc' => $e[3],
             );
         }
-
         return $products;
     }
 }
