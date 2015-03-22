@@ -1,5 +1,8 @@
-<ul>
+<div class="list-group">
     {% for category in categories %}
-    <li><a href="{{ path('products_list', {'id': category.id}) }}">{{  category.name }}</a></li>
+        <a href="{{ path('products_list', { 'id': category.id }) }}" class="list-group-item">
+            <span class="badge">{{ category.products|length }}</span>
+            {{ category.name }}
+        </a>
     {% endfor %}
-</ul>
+</div>

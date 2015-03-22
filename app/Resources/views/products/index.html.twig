@@ -3,34 +3,43 @@
 {% block title %}Produkty{% endblock %}
 
 {% block body %}
+    
     <h1>Lista produktów</h1>
+        
+    {% for product in products %}
 
-    <table class="table table-striped">
-        <thead>
-        <tr>
-            <th>id</th>
-            <th>nazwa</th>
-            <th>cena</th>
-            <th>opis</th>
-            <th>kategoria</th>
-        </tr>
-        </thead>
-        <tbody>
+        {% if loop.first or (loop.index % 4) == 0  %}
+            <div class="row">
+        {% endif %} 
 
-        {% for product in products %}
-            <tr>
-                <td>{{ product.id }}</td>
-                <td>{{ product.name }}</td>
-                <td>{{ product.price }}</td>
-                <td>{{ product.description }}</td>
-                <td>{{ product.category.name }}</td>
-                <td>
-                    <a href="{{ path('basket_add', {'id': product.id}) }}" class="btn btn-primary">Dodaj do koszyka</a>
-                </td>
-            </tr>
-        {% endfor %}
+        <div class="col-sm-6 col-md-3">
+            <div class="thumbnail clearfix">
+                <img src="http://placehold.it/240x200" alt="" class="img-thumbnail">
+                <div class="caption">
+                    <h3>{{ product.name }}</h3>
+                    <p>{{ product.description | truncate(50, true, ' (...)') }}</p>
 
-        </tbody>
-    </table>
+                    <div class="pull-left">
+                        <p>
+                            <a href="{{ path('basket_add', {'id': product.id}) }}" class="btn btn-primary" role="button">Koszyk</a> 
+                            <a href="#" class="btn btn-default" role="button">Pokaż</a>
+                        </p>
+                    </div>
+                    <div class="pull-right">
+                        <h4 class="text-danger">{{ product.price }}</h4>
+                    </div>
+                </div>
+            </div>
+        </div>
 
+        {% if loop.last or (loop.index % 4) == 0  %}
+            </div>
+        {% endif %}
+
+    {% endfor %}
+    
+    <div class="row">
+        {{ knp_pagination_render(products) }}
+    </div>
+    
 {% endblock %}

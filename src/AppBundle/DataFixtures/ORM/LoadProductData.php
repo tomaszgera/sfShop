@@ -16,31 +16,20 @@ class LoadProductsData extends AbstractFixture implements OrderedFixtureInterfac
 
     public function load(ObjectManager $manager)
     {
-        $product1 = new Product();
-        $product1->setName('Hdd 1TB Seagate');
-        $product1->setDescription('Opis dysku twardego 1TB');
-        $product1->setPrice(230);
-        $product1->setAmount(10);
-        $product1->setCategory($this->getReference('category1'));
-        $manager->persist($product1);
+        $faker = \Faker\Factory::create('pl_PL');
 
-        $product2 = new Product();
-        $product2->setName('Klawiatura multimedialna Logitech');
-        $product2->setDescription('Opis klawiatury');
-        $product2->setPrice(58);
-        $product2->setAmount(10);
-        $product2->setCategory($this->getReference('category2'));
-        $manager->persist($product2);
+        for ($j = 0; $j < 200; $j++) {
+            $product = new Product();
+            $product->setName($faker->sentence(2));
+            $product->setDescription($faker->text());
+            $product->setPrice($faker->numberBetween(50, 999));
+            $product->setAmount($faker->numberBetween(1, 30));
+            $product->setCategory($this->getReference('category' . $faker->numberBetween(1, 11)));
 
-        $product3 = new Product();
-        $product3->setName('Drukarka HP LaserJet');
-        $product3->setDescription('Opis drukarki');
-        $product3->setPrice(390);
-        $product3->setAmount(10);
-        $product3->setCategory($this->getReference('category3'));
-        $manager->persist($product3);
-
-        $manager->flush();
+            $manager->persist($product);
+        }
+        
+	$manager->flush();
     }
 
 }
