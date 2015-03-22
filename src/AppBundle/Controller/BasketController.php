@@ -7,6 +7,8 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Component\HttpFoundation\Request;
 
+use AppBundle\Entity\Product;
+
 class BasketController extends Controller
 {
     /**
@@ -15,38 +17,21 @@ class BasketController extends Controller
      */
     public function indexAction(Request $request)
     {
-        $session = $request->getSession();
-
-        $basket = $session->get('basket', array());
-        $products = $this->getProducts();
-
-
-
-        $productsInBasket = array();
-        foreach ($basket as $id => $b){
-            $productsInBasket[] = $products[$id];
-        }
         return array(
-            'products_in_basket' => $productsInBasket,
+            'basket' => $this->get('basket'),
         );
-
-
     }
 
     /**
      * @Route("/koszyk/{id}/dodaj", name="basket_add")
      * @Template()
      */
-    public function addAction($id, Request $request)
+    public function addAction(Product $product)
     {
-        $session = $request->getSession();
-
-        $basket = $session->get('basket', array());
-
-        $basket[$id] = 1;
-
-        $session->set('basket', $basket);
-        $this->addFlash('notice', 'Produkt został dodany do koszyka');
+        $basket = $this->get('basket');
+        $basket->add($product);
+                
+        $this->addFlash('notice', sprintf('Produkt "%s" został dodany do koszyka', $product->getName()));
 
         return $this->redirectToRoute('basket');
     }
@@ -55,23 +40,18 @@ class BasketController extends Controller
      * @Route("/koszyk/{id}/usun", name="basket_remove")
      * @Template()
      */
-    public function removeAction($id, Request $request)
+    public function removeAction(Product $product)
     {
-        $session = $request->getSession();
+        $basket = $this->get('basket');
+        
+        try{
+        $basket->remove($product);
 
-        $basket = $session->get('basket', array());
-
-        if(!array_key_exists($id, $basket)) {
-            $this->addFlash('notice', 'Produkt nie istnieje');
-
-            return $this->redirectToRoute('basket');
+        $this->addFlash('notice', sprintf('Produkt "%s" został usunięty z koszyka', $product->getName()));
+                    
+        } catch (\Exception $ex) {
+            $this->addFlash('notice', $ex->getMessage());
         }
-
-        unset($basket[$id]);
-
-        $session->set('basket', $basket);
-
-        $this->addFlash('notice', 'Produkt został usunięty z koszyka');
 
         return $this->redirectToRoute('basket');
     }
@@ -95,14 +75,19 @@ class BasketController extends Controller
     }
 
     /**
-     * @Route("/koszyk/wyczysc")
+     * @Route("/koszyk/wyczysc", name="basket_clear")
      * @Template()
      */
     public function clearAction()
     {
-        return array(
-                // ...
-            );
+        $basket = $this
+                ->get('basket')
+                ->clear();
+          
+        $this->addFlash('notice', 'Wszystkie produkty zostały usunięte z koszyka');
+                    
+        return $this->redirectToRoute('basket');
+        
     }
 
     /**
