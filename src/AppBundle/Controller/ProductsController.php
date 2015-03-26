@@ -42,4 +42,25 @@ class ProductsController extends Controller
             'form' => $form->createView(),
         ]);
     }
+    
+    /**
+     * @Route("/produkty/{id}/show", name="products_show")
+     */
+    public function showAction($id)
+    {
+        
+    $product = $this->getDoctrine()
+        ->getRepository('AppBundle:Product')
+        ->find($id);
+
+    if (!$product) {
+        throw $this->createNotFoundException(
+            'No product found for id '.getName($id)
+        );
+    }
+        return $this->render('products/show.html.twig',[
+            'product' => $product,
+        ]);
+        
+    }
 }
