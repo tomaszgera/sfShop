@@ -1,10 +1,10 @@
 <?php
 namespace AppBundle\Controller;
+use AppBundle\Entity\Product;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\Request;
 use AppBundle\Entity\Category;
-use AppBundle\Form\ProductType;
 
 class ProductsController extends Controller
 {
@@ -30,37 +30,50 @@ class ProductsController extends Controller
     }
     
     /**
-     * 
-     * @Route("/produkty/dodaj", name="products_add")
+     * @Route("/produkt/{id}", name="product_show")
      */
-    public function addAction(Request $request)
+     public function showAction(Product $product)
     {
-        $form = $this->createForm(new ProductType());
-        $form->handleRequest($request);
-        
-        return $this->render('products/add.html.twig',[
-            'form' => $form->createView(),
+        return $this->render('products/show.html.twig', [
+            'product'   => $product
         ]);
     }
     
     /**
-     * @Route("/produkty/{id}/show", name="products_show")
+     * @Route("/szukaj", name="product_search")
      */
-    public function showAction($id)
+    public function searchAction(Request $request)
     {
+        $query = $request->query->get('query');
         
-    $product = $this->getDoctrine()
-        ->getRepository('AppBundle:Product')
-        ->find($id);
-
-    if (!$product) {
-        throw $this->createNotFoundException(
-            'No product found for id '.getName($id)
-        );
-    }
-        return $this->render('products/show.html.twig',[
-            'product' => $product,
+        // validacja wartości przekazanej w parametrze
+//        $constraint = new NotBlank();
+//        $errors = $this->get('validator')->validate($query, $constraint);
+        
+        // alternatywny sposób zapisu zapytania
+//        $products = $this->getDoctrine()
+//            ->getManager()
+//            ->createQueryBuilder()
+//            ->from('AppBundle:Product', 'p')
+//            ->select('p')
+//            ->where('p.name LIKE :query')
+//            ->setParameter('query', '%'.$query.'%')
+//            ->getQuery()
+//            ->getResult();
+        
+        $products = $this->getDoctrine()
+            ->getRepository('AppBundle:Product')
+            ->createQueryBuilder('p')
+            ->select('p')
+            ->where('p.name LIKE :query')
+            ->orWhere('p.description LIKE :query')
+            ->setParameter('query', '%'.$query.'%')
+            ->getQuery()
+            ->getResult();
+        
+        return $this->render('products/search.html.twig', [
+            'query'     => $query,
+            'products'  => $products
         ]);
-        
     }
 }

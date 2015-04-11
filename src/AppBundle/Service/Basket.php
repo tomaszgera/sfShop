@@ -22,6 +22,10 @@ class Basket{
     
     public function add(Product $product, $quantity = 1) 
     {
+        if ($product->getAmount() <= 0){
+            throw new \Exception('Produkt który próbujesz dodać jest niedostępny');
+        }
+        
         $products = $this->getProducts();
         if (!array_key_exists($product->getId(), $products)) {
         
@@ -62,5 +66,24 @@ class Basket{
         $this->session->remove('basket');
 
         return $this;
+    }
+    
+    public function getPrice()
+    {
+        $price = 0;
+        
+        foreach ($this->getProducts() as $product){
+            $price += $product['price'] * $product['quantity'];
+        }
+        return $price;
+    }
+    public function getQuantity()
+    {
+        $quantity = 0;
+        
+        foreach ($this->getProducts() as $product){
+            $quantity += $product['quantity'];
+        }
+        return $quantity;
     }
 }

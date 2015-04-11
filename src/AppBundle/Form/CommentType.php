@@ -6,7 +6,7 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
-class ProductType extends AbstractType
+class CommentType extends AbstractType
 {
         /**
      * @param FormBuilderInterface $builder
@@ -15,11 +15,11 @@ class ProductType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('category')
-            ->add('name')
-            ->add('description')
-            ->add('price', 'money', array('currency' => 'PLN'))
-            ->add('amount')            
+            ->add('content')
+            ->add('createdAt')
+            ->add('nbVoteUp')
+            ->add('nbVoteDown')
+            ->add('verified')
         ;
     }
     
@@ -29,7 +29,7 @@ class ProductType extends AbstractType
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'AppBundle\Entity\Product'
+            'data_class' => 'AppBundle\Entity\Comment'
         ));
     }
 
@@ -38,6 +38,6 @@ class ProductType extends AbstractType
      */
     public function getName()
     {
-        return 'appbundle_product';
+        return 'appbundle_comment';
     }
 }

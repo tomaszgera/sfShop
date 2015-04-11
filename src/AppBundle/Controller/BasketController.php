@@ -15,7 +15,7 @@ class BasketController extends Controller
      * @Route("/koszyk", name="basket")
      * @Template()
      */
-    public function indexAction(Request $request)
+    public function indexAction()
     {
         return array(
             'basket' => $this->get('basket'),
@@ -26,10 +26,22 @@ class BasketController extends Controller
      * @Route("/koszyk/{id}/dodaj", name="basket_add")
      * @Template()
      */
-    public function addAction(Product $product)
+    public function addAction(Request $request, Product $product)
     {
-        $basket = $this->get('basket');
-        $basket->add($product);
+        if (is_null($product)){
+            $this->addFlash('error', 'Produkt który próbujesz dodać jest niedostępny');
+            return $this->redirectToRoute('products_list');
+        }
+        
+        try {
+            
+            $basket = $this->get('basket');
+            $basket->add($product);
+            
+        } catch (\Exception $e) {
+             $this->addFlash('error', $e->getMessage());
+             return $this->redirect($request->headers->get('referer'));
+        }    
                 
         $this->addFlash('notice', sprintf('Produkt "%s" został dodany do koszyka', $product->getName()));
 
@@ -117,5 +129,4 @@ class BasketController extends Controller
 
         return $products;
     }
-
 }
