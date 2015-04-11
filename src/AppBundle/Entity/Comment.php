@@ -55,6 +55,13 @@ class Comment
      * 
      */
     private $nbVoteDown = 0;
+    
+    /**
+     * @var Product
+     * 
+     * @ORM\ManyToOne(targetEntity="Product", inversedBy="comments")
+     */
+    private $product;
 
     /**
      * @var boolean
