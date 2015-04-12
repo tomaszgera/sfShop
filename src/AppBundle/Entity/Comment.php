@@ -62,6 +62,13 @@ class Comment
      * @ORM\ManyToOne(targetEntity="Product", inversedBy="comments")
      */
     private $product;
+    
+    /**
+     * @var User
+     * 
+     * @ORM\ManyToOne(targetEntity="User", inversedBy="comments")
+     */
+    private $user;
 
     /**
      * @var boolean
@@ -221,5 +228,28 @@ class Comment
     public function getProduct()
     {
         return $this->product;
+    }
+
+    /**
+     * Set user
+     *
+     * @param \AppBundle\Entity\User $user
+     * @return Comment
+     */
+    public function setUser(\AppBundle\Entity\User $user = null)
+    {
+        $this->user = $user;
+
+        return $this;
+    }
+
+    /**
+     * Get user
+     *
+     * @return \AppBundle\Entity\User 
+     */
+    public function getUser()
+    {
+        return $this->user;
     }
 }

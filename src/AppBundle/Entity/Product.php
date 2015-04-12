@@ -75,6 +75,11 @@ class Product
      * @ORM\OneToMany(targetEntity="Comment", mappedBy="product")
      */
     private $comments;
+    
+    public function __toString() 
+    {
+        return $this->name;
+    }
 
 
     /**
