@@ -34,19 +34,44 @@ class ProductsController extends Controller {
      * @Route("/produkt/{id}", name="product_show")
      */
     public function showAction(Product $product, Request $request) {
+
+        //pobiera aktualznie zalogowanego uzytkownika
+        $user = $this->getUser();
+
+        //tworzymy komentarz
         $comment = new Comment();
+        //przypisujemy komentarz do produktu
         $comment->setProduct($product);
+        //ustawienie użytkownika na komentarz
+        $comment->setUser($user);
 
         $form = $this->createForm(new CommentType(), $comment);
-
+        //przetrwarzamy dane formularza
         $form->handleRequest($request);
 
+        if ($form->isSubmitted() && !$user) {
+            $this->addFlash('error', 'Aby móc dodać komentarz musisz się wcześniej zalogować');
+            return $this->redirectToRoute('product_show', ['id' => $product->getId()]);
+        }
+
+
         if ($form->isValid()) {
+
+            if ($user->hasRole('ROLE_ADMIN')) {
+                $comment->setVerified('true');
+            }
+
+
             $em = $this->getDoctrine()->getManager();
             $em->persist($comment);
             $em->flush();
 
-            $this->addFlash('notice', "Komentarz został pomyślnie zapisany.");
+            if ($user->hasRole('ROLE_ADMIN')) {
+            // if ($user->isAdmin()) {
+                $this->addFlash('notice', "Komentarz został pomyślnie zapisany i opublikowany");
+            } else {
+                $this->addFlash('notice', "Komentarz został pomyślnie zapisany i oczekuje na weryfikacje");
+            }
 
             return $this->redirectToRoute('product_show', ['id' => $product->getId()]);
         }

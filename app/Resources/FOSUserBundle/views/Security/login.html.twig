@@ -53,7 +53,7 @@
     {% endif %}
 
 
-    <form class="form-signin" action="{{ path("fos_user_security_check") }}" method="post">
+    <form class="form-signin" action="{{ path("fos_user_security_check") }}" method="post" novalidate>
         <h2 class="form-signin-heading">Zaloguj się</h2>
 
         <label for="username">{{ 'security.login.username'|trans }}</label>

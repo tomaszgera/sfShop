@@ -24,45 +24,50 @@
     </div>
 
     <h2> Komentarze</h2>
+    {% if not app.user %}
 
-    <form method="post" novalidate>
+        <p>Aby móc dodać komentarz musisz się <a href="{{ path('fos_user_security_login') }}">zalogować</a>
 
-        <div class="form-group">
-            {{ form_row(form.content) }}
+        {% else %}
+        <form method="post" novalidate>
 
-            {#
-                {{ form_label(form.content) }}
-                {{ form_errors(form.content) }}
-                {{ form_widget(form.content) }}
-            #}
+            <div class="form-group">
+                {{ form_row(form.content) }}
 
-        </div>
+                {#
+                    {{ form_label(form.content) }}
+                    {{ form_errors(form.content) }}
+                    {{ form_widget(form.content) }}
+                #}
 
-        {{ form_rest(form) }}
+            </div>
 
-        <input class="btn btn-success" type="submit" value="Dodaj komentarz" />
+            {{ form_rest(form) }}
 
-    </form>
+            <input class="btn btn-success" type="submit" value="Dodaj komentarz" />
 
+        </form>
+    {% endif %}
     <br />
-    
-    {% for comment in product.comments %}
+
+    {% for comment in product.comments if comment.verified%}
 
         <div class="row">
 
             <div class="panel panel-default">
                 <div class="panel-body">
                     <p>{{ comment.content }}</p>
-                    <small>Dodany {{ comment.createdAt|date('d-m-Y') }}</small>
+                    <small>Dodany {{ comment.createdAt|date('d-m-Y') }} przez {{ comment.user }}</small>
                 </div>
             </div>
 
         </div>
-    
+
     {% else %}
-        
+
         <p> Nie ma jeszcze żadnych komentarzy. Dodaj swój jako pierwszy!</p>
 
     {% endfor %}
+
 
 {% endblock %}

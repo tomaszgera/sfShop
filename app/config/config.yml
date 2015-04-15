@@ -82,3 +82,14 @@ fos_user:
     db_driver: orm # other valid values are 'mongodb', 'couchdb' and 'propel'
     firewall_name: main
     user_class: AppBundle\Entity\User
+    registration:
+        confirmation:
+            from_email: # Use this node only if you don't want the global email address for the confirmation email
+                address:        ...
+                sender_name:    ...
+            enabled:    false # change to true for required email confirmation
+            template:   FOSUserBundle:Registration:email.txt.twig
+        form:
+            type:               fos_user_registration
+            name:               fos_user_registration_form
+            validation_groups:  [Registration, Default]

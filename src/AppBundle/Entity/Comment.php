@@ -30,7 +30,7 @@ class Comment
      * @Assert\NotBlank(message="Proszę wprowadzic treść komentarza")
      * @Assert\Length( 
      *      min=15, 
-     *      minMessage="Komentarz musi posiadać conajmniej {{limit}} znaków.")
+     *      minMessage="Komentarz musi posiadać conajmniej {{ limit }} znaków.")
      */
     private $content;
 
