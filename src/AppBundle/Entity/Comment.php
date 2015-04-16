@@ -160,6 +160,11 @@ class Comment
     {
         return $this->nbVoteUp;
     }
+    
+    public function __toString() 
+    {
+        return $this->nbVoteUp;
+    }
 
     /**
      * Set nbVoteDown

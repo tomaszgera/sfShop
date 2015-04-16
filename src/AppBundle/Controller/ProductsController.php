@@ -60,8 +60,7 @@ class ProductsController extends Controller {
             if ($user->hasRole('ROLE_ADMIN')) {
                 $comment->setVerified('true');
             }
-
-
+          
             $em = $this->getDoctrine()->getManager();
             $em->persist($comment);
             $em->flush();

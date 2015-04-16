@@ -10,8 +10,8 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Pagerfanta\Pagerfanta;
 use Pagerfanta\Adapter\DoctrineORMAdapter;
 use Pagerfanta\View\TwitterBootstrapView;
-
 use AppBundle\Entity\Comment;
+use AppBundle\Entity\Product;
 use AppBundle\Form\AdminCommentType as CommentType;
 use AppBundle\Form\CommentFilterType;
 
@@ -20,8 +20,8 @@ use AppBundle\Form\CommentFilterType;
  *
  * @Route("/admin/comment")
  */
-class CommentController extends Controller
-{
+class CommentController extends Controller {
+
     /**
      * Lists all Comment entities.
      *
@@ -29,8 +29,7 @@ class CommentController extends Controller
      * @Method("GET")
      * @Template()
      */
-    public function indexAction()
-    {
+    public function indexAction() {
         list($filterForm, $queryBuilder) = $this->filter();
 
         list($entities, $pagerHtml) = $this->paginator($queryBuilder);
@@ -43,11 +42,10 @@ class CommentController extends Controller
     }
 
     /**
-    * Create filter form and process filter request.
-    *
-    */
-    protected function filter()
-    {
+     * Create filter form and process filter request.
+     *
+     */
+    protected function filter() {
         $request = $this->getRequest();
         $session = $request->getSession();
         $filterForm = $this->createForm(new CommentFilterType());
@@ -84,11 +82,10 @@ class CommentController extends Controller
     }
 
     /**
-    * Get results from paginator and get paginator view.
-    *
-    */
-    protected function paginator($queryBuilder)
-    {
+     * Get results from paginator and get paginator view.
+     *
+     */
+    protected function paginator($queryBuilder) {
         // Paginator
         $adapter = new DoctrineORMAdapter($queryBuilder);
         $pagerfanta = new Pagerfanta($adapter);
@@ -98,8 +95,7 @@ class CommentController extends Controller
 
         // Paginator - route generator
         $me = $this;
-        $routeGenerator = function($page) use ($me)
-        {
+        $routeGenerator = function($page) use ($me) {
             return $me->generateUrl('admin_comment', array('page' => $page));
         };
 
@@ -122,9 +118,8 @@ class CommentController extends Controller
      * @Method("POST")
      * @Template("AppBundle:Comment:new.html.twig")
      */
-    public function createAction(Request $request)
-    {
-        $entity  = new Comment();
+    public function createAction(Request $request) {
+        $entity = new Comment();
         $form = $this->createForm(new CommentType(), $entity);
         $form->bind($request);
 
@@ -139,7 +134,7 @@ class CommentController extends Controller
 
         return array(
             'entity' => $entity,
-            'form'   => $form->createView(),
+            'form' => $form->createView(),
         );
     }
 
@@ -150,14 +145,13 @@ class CommentController extends Controller
      * @Method("GET")
      * @Template()
      */
-    public function newAction()
-    {
+    public function newAction() {
         $entity = new Comment();
-        $form   = $this->createForm(new CommentType(), $entity);
+        $form = $this->createForm(new CommentType(), $entity);
 
         return array(
             'entity' => $entity,
-            'form'   => $form->createView(),
+            'form' => $form->createView(),
         );
     }
 
@@ -168,8 +162,7 @@ class CommentController extends Controller
      * @Method("GET")
      * @Template()
      */
-    public function showAction($id)
-    {
+    public function showAction($id) {
         $em = $this->getDoctrine()->getManager();
 
         $entity = $em->getRepository('AppBundle:Comment')->find($id);
@@ -181,7 +174,7 @@ class CommentController extends Controller
         $deleteForm = $this->createDeleteForm($id);
 
         return array(
-            'entity'      => $entity,
+            'entity' => $entity,
             'delete_form' => $deleteForm->createView(),
         );
     }
@@ -193,8 +186,7 @@ class CommentController extends Controller
      * @Method("GET")
      * @Template()
      */
-    public function editAction($id)
-    {
+    public function editAction($id) {
         $em = $this->getDoctrine()->getManager();
 
         $entity = $em->getRepository('AppBundle:Comment')->find($id);
@@ -207,8 +199,8 @@ class CommentController extends Controller
         $deleteForm = $this->createDeleteForm($id);
 
         return array(
-            'entity'      => $entity,
-            'edit_form'   => $editForm->createView(),
+            'entity' => $entity,
+            'edit_form' => $editForm->createView(),
             'delete_form' => $deleteForm->createView(),
         );
     }
@@ -220,8 +212,7 @@ class CommentController extends Controller
      * @Method("PUT")
      * @Template("AppBundle:Comment:edit.html.twig")
      */
-    public function updateAction(Request $request, $id)
-    {
+    public function updateAction(Request $request, $id) {
         $em = $this->getDoctrine()->getManager();
 
         $entity = $em->getRepository('AppBundle:Comment')->find($id);
@@ -245,8 +236,8 @@ class CommentController extends Controller
         }
 
         return array(
-            'entity'      => $entity,
-            'edit_form'   => $editForm->createView(),
+            'entity' => $entity,
+            'edit_form' => $editForm->createView(),
             'delete_form' => $deleteForm->createView(),
         );
     }
@@ -257,8 +248,7 @@ class CommentController extends Controller
      * @Route("/{id}", name="admin_comment_delete")
      * @Method("DELETE")
      */
-    public function deleteAction(Request $request, $id)
-    {
+    public function deleteAction(Request $request, $id) {
         $form = $this->createDeleteForm($id);
         $form->bind($request);
 
@@ -287,11 +277,45 @@ class CommentController extends Controller
      *
      * @return Symfony\Component\Form\Form The form
      */
-    private function createDeleteForm($id)
-    {
+    private function createDeleteForm($id) {
         return $this->createFormBuilder(array('id' => $id))
-            ->add('id', 'hidden')
-            ->getForm()
+                        ->add('id', 'hidden')
+                        ->getForm()
         ;
     }
+
+    /**
+     * 
+     * @Route(name="vote_up")
+     * @Template()
+     * 
+     */
+    public function setVoteUp($id) {
+
+        $em = $this->getDoctrine()->getManager();
+
+        $entity = $em->getRepository('AppBundle:Comment')->find($id);
+
+        $entity->setNbVoteUp(1);
+
+        return $entity;
+    }
+
+    /**
+     * 
+     * @Route("/", name="vote_down")
+     * @Template()
+     * 
+     */
+    public function setVoteDown($id) {
+
+        $em = $this->getDoctrine()->getManager();
+
+        $entity = $em->getRepository('AppBundle:Comment')->find($id);
+
+        $entity->setNbVoteDown($entity->getNbVoteDown() + 1);
+
+        return $entity;
+    }
+
 }
