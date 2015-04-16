@@ -7,7 +7,7 @@ use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
 use AppBundle\Entity\Product;
 
-class LoadProductsData extends AbstractFixture implements OrderedFixtureInterface
+class LoadProductData extends AbstractFixture implements OrderedFixtureInterface
 {
     public function getOrder()
     {
@@ -17,6 +17,8 @@ class LoadProductsData extends AbstractFixture implements OrderedFixtureInterfac
     public function load(ObjectManager $manager)
     {
         $faker = \Faker\Factory::create('pl_PL');
+        
+        $i=1;
 
         for ($j = 0; $j < 200; $j++) {
             $product = new Product();
@@ -25,6 +27,7 @@ class LoadProductsData extends AbstractFixture implements OrderedFixtureInterfac
             $product->setPrice($faker->numberBetween(50, 999));
             $product->setAmount($faker->numberBetween(1, 30));
             $product->setCategory($this->getReference('category' . $faker->numberBetween(1, 11)));
+            $this->addReference('product'. $i++, $product);
 
             $manager->persist($product);
         }

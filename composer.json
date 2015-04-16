@@ -27,7 +27,7 @@
       "stof/doctrine-extensions-bundle": "~1.1@dev",
       "knplabs/knp-menu-bundle": "dev-master",
       "knplabs/knp-paginator-bundle": "dev-master",
-      "fzaninotto/faker": "1.*@stable",
+      "fzaninotto/faker": "1.5.*@dev",
       "vich/uploader-bundle": "~0.11.0"
     },
     "require-dev": {
