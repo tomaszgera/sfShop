@@ -4,51 +4,64 @@ namespace AppBundle\DataFixtures\ORM;
 
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
+use FOS\UserBundle\Util\UserManipulator;
 use Doctrine\Common\Persistence\ObjectManager;
 use AppBundle\Entity\User;
+use Symfony\Component\DependencyInjection\ContainerAwareInterface;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
-class LoadUserData extends AbstractFixture implements OrderedFixtureInterface
-{
-    public function getOrder()
-    {
+class LoadUserData extends AbstractFixture implements OrderedFixtureInterface, ContainerAwareInterface {
+
+    private $container;
+
+    public
+            function setContainer(ContainerInterface $container = null) {
+        $this->container = $container;
+    }
+
+    public function getOrder() {
         return 3;
     }
 
-    public function load(ObjectManager $manager)
-    {
+    public function load(ObjectManager $manager) {
+
+
         $faker = \Faker\Factory::create('pl_PL');
-        
-        $i=1;
+        $manipulator = $this->container->get('fos_user.util.user_manipulator');
+
+        $i = 1;
 
         for ($j = 1; $j < 11; $j++) {
-            $user = new User();
-            $user->setEmail($faker->email());
-            $user->setUsername($faker->userName());
-            $user->setPassword($faker->password());
-            $user->setEnabled(true);
-            $this->addReference('user'. $i++, $user);
 
-            $manager->persist($user);
+            
+                $username = $faker->userName();
+                $password = $faker->password();
+                $email = $faker->email();
+                $inactive = false;
+                $superadmin = false;
+            $user = $manipulator->create($username, $password, $email, !$inactive, $superadmin);
+
+            $this->addReference('user' . $i++, $user);
         }
-            $useradmin = new User();
-            $useradmin->setEmail('admin@admin.pl');
-            $useradmin->setUsername('admin');
-            $useradmin->setPassword('admin');
-            $useradmin->setEnabled(true);
-            $useradmin->addRole('ROLE_ADMIN');
-                    
-            $manager->persist($useradmin);
-             
-            $useruser = new User();
-            $useruser->setEmail('user@user.pl');
-            $useruser->setUsername('user');
-            $useruser->setPassword('user');
-            $useruser->setEnabled(true);
-            
-            $manager->persist($useruser);
-            
-        
-	$manager->flush();
+
+        $email = "admin@admin.pl";
+        $username = "admin";
+        $password = "admin";
+        $inactive = false;
+        $superadmin = true;
+
+        $manipulator->create($username, $password, $email, !$inactive, $superadmin);
+
+        $email = "user@user.pl";
+        $username = "user";
+        $password = "user";
+        $inactive = false;
+        $superadmin = false;
+
+        $manipulator->create($username, $password, $email, !$inactive, $superadmin);
+
+
+        $manager->flush();
     }
 
 }
