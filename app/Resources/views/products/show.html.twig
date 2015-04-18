@@ -59,11 +59,11 @@
                     <p>{{ comment.content }}</p>
                     <small>Dodany {{ comment.createdAt|date('d-m-Y') }} przez {{ comment.user }}</small>
                     <p>
-                         
-                        <a href="{{ comment.setnbVoteUp }}" title="Up" class="glyphicon glyphicon-thumbs-up btn btn-default btn-mini"> {{ comment.nbVoteUp }} </a> | 
-                         
-                        <a href="#" title="Down" class="glyphicon glyphicon-thumbs-down btn btn-default btn-mini"> {{ comment.nbVoteDown }} </a>
-          
+
+                        <a href="{{ path('vote_up', {'id': comment.id}) }}" title="Up" class="glyphicon glyphicon-thumbs-up btn btn-default btn-mini"> {{ comment.nbVoteUp }} </a> | 
+
+                        <a href="{{ path('vote_down', {'id': comment.id}) }}" title="Down" class="glyphicon glyphicon-thumbs-down btn btn-default btn-mini"> {{ comment.nbVoteDown }} </a>
+
                     </p>
                 </div>
             </div>

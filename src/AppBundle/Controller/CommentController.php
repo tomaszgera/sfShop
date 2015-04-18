@@ -18,7 +18,7 @@ use AppBundle\Form\CommentFilterType;
 /**
  * Comment controller.
  *
- * @Route("/admin/comment")
+ * @Route("/comment")
  */
 class CommentController extends Controller {
 
@@ -286,36 +286,47 @@ class CommentController extends Controller {
 
     /**
      * 
-     * @Route(name="vote_up")
+     * @Route("/{id}/voteup", name="vote_up")
+     * 
      * @Template()
      * 
      */
-    public function setVoteUp($id) {
-
+    public function voteUpAction($id) {
         $em = $this->getDoctrine()->getManager();
 
-        $entity = $em->getRepository('AppBundle:Comment')->find($id);
+        $vote = $em->getRepository('AppBundle:Comment')->find($id);
+        $product = $vote->getProduct();
 
-        $entity->setNbVoteUp(1);
+        $vote->setNbVoteUp($vote->getNbVoteUp() + 1);
 
-        return $entity;
+        $em->persist($vote);
+        $em->flush();
+
+        return $this->redirectToRoute('product_show', ['id' =>
+                    $product->getId()]);
     }
 
     /**
      * 
-     * @Route("/", name="vote_down")
+     * @Route("/{id}/votedown", name="vote_down")
+     * 
      * @Template()
      * 
      */
-    public function setVoteDown($id) {
+    public function voteDownAction($id) {
 
         $em = $this->getDoctrine()->getManager();
 
-        $entity = $em->getRepository('AppBundle:Comment')->find($id);
+        $vote = $em->getRepository('AppBundle:Comment')->find($id);
+        $product = $vote->getProduct();
 
-        $entity->setNbVoteDown($entity->getNbVoteDown() + 1);
+        $vote->setNbVoteDown($vote->getNbVoteDown() + 1);
 
-        return $entity;
+        $em->persist($vote);
+        $em->flush();
+
+        return $this->redirectToRoute('product_show', ['id' =>
+                    $product->getId()]);
     }
 
 }
