@@ -4,15 +4,16 @@ namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * Comment
  *
  * @ORM\Table(name="comment")
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="AppBundle\Repository\CommentRepository")
  */
-class Comment
-{
+class Comment {
+
     /**
      * @var integer
      *
@@ -55,14 +56,14 @@ class Comment
      * 
      */
     private $nbVoteDown = 0;
-    
+
     /**
      * @var Product
      * 
      * @ORM\ManyToOne(targetEntity="Product", inversedBy="comments")
      */
     private $product;
-    
+
     /**
      * @var User
      * 
@@ -76,10 +77,10 @@ class Comment
      * @ORM\Column(name="verified", type="boolean")
      */
     private $verified = false;
-    
-    public function __construct() 
-    {
-        $this->createdAt = new \DateTime();
+
+    public function __construct() {
+        $this->createdAt = new \DateTime("now");
+        $this->votes = new ArrayCollection();
     }
 
     /**
@@ -87,8 +88,7 @@ class Comment
      *
      * @return integer 
      */
-    public function getId()
-    {
+    public function getId() {
         return $this->id;
     }
 
@@ -98,8 +98,7 @@ class Comment
      * @param string $content
      * @return Comment
      */
-    public function setContent($content)
-    {
+    public function setContent($content) {
         $this->content = $content;
 
         return $this;
@@ -110,8 +109,7 @@ class Comment
      *
      * @return string 
      */
-    public function getContent()
-    {
+    public function getContent() {
         return $this->content;
     }
 
@@ -121,8 +119,7 @@ class Comment
      * @param \DateTime $createdAt
      * @return Comment
      */
-    public function setCreatedAt($createdAt)
-    {
+    public function setCreatedAt($createdAt) {
         $this->createdAt = $createdAt;
 
         return $this;
@@ -133,8 +130,7 @@ class Comment
      *
      * @return \DateTime 
      */
-    public function getCreatedAt()
-    {
+    public function getCreatedAt() {
         return $this->createdAt;
     }
 
@@ -144,8 +140,7 @@ class Comment
      * @param integer $nbVoteUp
      * @return Comment
      */
-    public function setNbVoteUp($nbVoteUp)
-    {
+    public function setNbVoteUp($nbVoteUp) {
         $this->nbVoteUp = $nbVoteUp;
 
         return $this;
@@ -156,8 +151,7 @@ class Comment
      *
      * @return integer 
      */
-    public function getNbVoteUp()
-    {
+    public function getNbVoteUp() {
         return $this->nbVoteUp;
     }
 
@@ -167,8 +161,7 @@ class Comment
      * @param integer $nbVoteDown
      * @return Comment
      */
-    public function setNbVoteDown($nbVoteDown)
-    {
+    public function setNbVoteDown($nbVoteDown) {
         $this->nbVoteDown = $nbVoteDown;
 
         return $this;
@@ -179,8 +172,7 @@ class Comment
      *
      * @return integer 
      */
-    public function getNbVoteDown()
-    {
+    public function getNbVoteDown() {
         return $this->nbVoteDown;
     }
 
@@ -190,8 +182,7 @@ class Comment
      * @param boolean $verified
      * @return Comment
      */
-    public function setVerified($verified)
-    {
+    public function setVerified($verified) {
         $this->verified = $verified;
 
         return $this;
@@ -202,8 +193,7 @@ class Comment
      *
      * @return boolean 
      */
-    public function getVerified()
-    {
+    public function getVerified() {
         return $this->verified;
     }
 
@@ -213,8 +203,7 @@ class Comment
      * @param \AppBundle\Entity\Product $product
      * @return Comment
      */
-    public function setProduct(\AppBundle\Entity\Product $product = null)
-    {
+    public function setProduct(\AppBundle\Entity\Product $product = null) {
         $this->product = $product;
 
         return $this;
@@ -225,8 +214,7 @@ class Comment
      *
      * @return \AppBundle\Entity\Product 
      */
-    public function getProduct()
-    {
+    public function getProduct() {
         return $this->product;
     }
 
@@ -236,8 +224,7 @@ class Comment
      * @param \AppBundle\Entity\User $user
      * @return Comment
      */
-    public function setUser(\AppBundle\Entity\User $user = null)
-    {
+    public function setUser(\AppBundle\Entity\User $user = null) {
         $this->user = $user;
 
         return $this;
@@ -248,8 +235,37 @@ class Comment
      *
      * @return \AppBundle\Entity\User 
      */
-    public function getUser()
-    {
+    public function getUser() {
         return $this->user;
     }
+
+    /**
+     * Add votes
+     *
+     * @param \AppBundle\Entity\CommentVote $votes
+     * @return Comment
+     */
+    public function addVote(\AppBundle\Entity\CommentVote $votes) {
+        $this->votes[] = $votes;
+        return $this;
+    }
+
+    /**
+     * Remove votes
+     *
+     * @param \AppBundle\Entity\CommentVote $votes
+     */
+    public function removeVote(\AppBundle\Entity\CommentVote $votes) {
+        $this->votes->removeElement($votes);
+    }
+
+    /**
+     * Get votes
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getVotes() {
+        return $this->votes;
+    }
+
 }

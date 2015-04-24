@@ -55,8 +55,8 @@
                                             <li class="divider"></li>
                                         {% endif %}
                                         <li><a href="{{ path('fos_user_profile_show') }}">Profil</a></li>
-                                        <li><a href="#">Moje zamówienia</a></li>
-                                        <li><a href="#">Moje komentarze</a></li>
+                                        <li><a href="{{ path('orders_list') }}">Moje zamówienia</a></li>
+                                        <li><a href="{{ path('comments_list') }}">Moje komentarze</a></li>
                                         <li class="divider"></li>
                                         <li><a href="{{ path('fos_user_security_logout') }}">Wyloguj</a></li>
                                     </ul>

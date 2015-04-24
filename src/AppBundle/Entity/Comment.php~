@@ -30,7 +30,7 @@ class Comment
      * @Assert\NotBlank(message="Proszę wprowadzic treść komentarza")
      * @Assert\Length( 
      *      min=15, 
-     *      minMessage="Komentarz musi posiadać conajmniej {{limit}} znaków.")
+     *      minMessage="Komentarz musi posiadać conajmniej {{ limit }} znaków.")
      */
     private $content;
 
@@ -228,5 +228,28 @@ class Comment
     public function getProduct()
     {
         return $this->product;
+    }
+
+    /**
+     * Set user
+     *
+     * @param \AppBundle\Entity\User $user
+     * @return Comment
+     */
+    public function setUser(\AppBundle\Entity\User $user = null)
+    {
+        $this->user = $user;
+
+        return $this;
+    }
+
+    /**
+     * Get user
+     *
+     * @return \AppBundle\Entity\User 
+     */
+    public function getUser()
+    {
+        return $this->user;
     }
 }
