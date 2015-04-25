@@ -31,6 +31,7 @@ class Basket{
         
         $products[$product->getId()] = array(
             'id'        => $product->getId(),
+            'slug'      => $product->getSlug(),
             'name'      => $product->getName(),
             'price'     => $product->getPrice(),
             'quantity'  => 0

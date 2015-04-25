@@ -93,3 +93,9 @@ fos_user:
             type:               fos_user_registration
             name:               fos_user_registration_form
             validation_groups:  [Registration, Default]
+stof_doctrine_extensions:
+    default_locale: "%locale%"
+    orm:
+        default:
+            sluggable: true
+            timestampable: true

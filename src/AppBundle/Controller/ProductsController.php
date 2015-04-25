@@ -31,7 +31,7 @@ class ProductsController extends Controller {
     }
 
     /**
-     * @Route("/produkt/{id}", name="product_show")
+     * @Route("/produkt/{slug}", name="product_show")
      */
     public function showAction(Product $product, Request $request) {
 

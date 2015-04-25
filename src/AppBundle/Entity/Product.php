@@ -4,6 +4,7 @@ namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
+use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
  * Product
@@ -21,6 +22,13 @@ class Product
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;
+    
+    /**
+     * 
+     * @Gedmo\Slug(fields={"name"})
+     * @ORM\Column(length=255, unique=true)
+     */
+    private $slug;
 
     /**
      * @var string
@@ -90,6 +98,16 @@ class Product
     public function getId()
     {
         return $this->id;
+    }
+    
+    /**
+     * Get slug
+     *
+     * @return integer 
+     */
+    public function getSlug()
+    {
+        return $this->slug;
     }
 
     /**
