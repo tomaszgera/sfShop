@@ -286,12 +286,11 @@ class CommentController extends Controller {
 
     /**
      * 
-     * @Route("/{id}/voteup", name="vote_up")
+     * @Route("/komentarze/glosuj-up/{id}/{productId}", name="vote_up")
      * 
-     * @Template()
      * 
      */
-    public function voteUpAction($id) {
+    public function voteUpAction(Comment $comment, $productId, Request $request) {
 
         $commentVote = $this->getDoctrine()
                 ->getRepository('AppBundle:CommentVote')
@@ -311,19 +310,17 @@ class CommentController extends Controller {
             $em->persist($comment);
             $em->flush();
         }
-        return $this->redirectToRoute('product_show', [
-                    'id' => $productId,
-        ]);
+        return $this->redirect($request->headers->get('referer'));
     }
 
     /**
      * 
-     * @Route("/{id}/votedown", name="vote_down")
+     * @Route("/komentarze/glosuj-down/{id}/{productId}", name="vote_down")
      * 
-     * @Template()
+     * 
      * 
      */
-    public function voteDownAction($id) {
+    public function voteDownAction(Comment $comment, $productId, Request $request) {
 
         $commentVote = $this->getDoctrine()
                 ->getRepository('AppBundle:CommentVote')
@@ -343,9 +340,8 @@ class CommentController extends Controller {
             $em->persist($comment);
             $em->flush();
         }
-        return $this->redirectToRoute('product_show', [
-                    'id' => $productId,
-        ]);
+        return $this->redirect($request->headers->get('referer'));
+        
     }
 
 }

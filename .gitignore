@@ -11,3 +11,4 @@
 /web/bundles/
 /vendor/
 /nbproject/*
+/*.php~

@@ -45,7 +45,7 @@ class CommentController extends Controller {
      * 
      * 
      */
-    public function voteUpAction(Comment $comment, $productId) {
+    public function voteUpAction(Comment $comment, $productId, Request $request) {
 
         $commentVote = $this->getDoctrine()
                 ->getRepository('AppBundle:CommentVote')
@@ -54,7 +54,7 @@ class CommentController extends Controller {
             'comment' => $comment,
         ]);
         if ($commentVote) {
-            $this->addFlash('danger', 'Możesz zagłosować na komentarz tylko raz');
+            $this->addFlash('error', 'Możesz zagłosować na komentarz tylko raz');
         } else {
             $em = $this->getDoctrine()->getManager();
             $commentVote = new CommentVote();
@@ -65,9 +65,7 @@ class CommentController extends Controller {
             $em->persist($comment);
             $em->flush();
         }
-        return $this->redirectToRoute('product_show', [
-                    'id' => $productId,
-        ]);
+        return $this->redirect($request->headers->get('referer'));
     }
 
     /**
@@ -77,7 +75,7 @@ class CommentController extends Controller {
      * 
      * 
      */
-    public function voteDownAction(Comment $comment, $productId) {
+    public function voteDownAction(Comment $comment, $productId, Request $request) {
 
         $commentVote = $this->getDoctrine()
                 ->getRepository('AppBundle:CommentVote')
@@ -86,7 +84,7 @@ class CommentController extends Controller {
             'comment' => $comment,
         ]);
         if ($commentVote) {
-            $this->addFlash('danger', 'Możesz zagłosować na komentarz tylko raz');
+            $this->addFlash('error', 'Możesz zagłosować na komentarz tylko raz');
         } else {
             $em = $this->getDoctrine()->getManager();
             $commentVote = new CommentVote();
@@ -97,9 +95,8 @@ class CommentController extends Controller {
             $em->persist($comment);
             $em->flush();
         }
-        return $this->redirectToRoute('product_show', [
-                    'id' => $productId,
-        ]);
+        return $this->redirect($request->headers->get('referer'));
+        
     }
 
 }

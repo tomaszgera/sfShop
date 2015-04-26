@@ -51,7 +51,7 @@ class ProductsController extends Controller {
 
         if ($form->isSubmitted() && !$user) {
             $this->addFlash('error', 'Aby móc dodać komentarz musisz się wcześniej zalogować');
-            return $this->redirectToRoute('product_show', ['id' => $product->getId()]);
+            return $this->redirectToRoute('product_show', ['slug' => $product->getSlug()]);
         }
 
 
@@ -72,7 +72,7 @@ class ProductsController extends Controller {
                 $this->addFlash('notice', "Komentarz został pomyślnie zapisany i oczekuje na weryfikacje");
             }
 
-            return $this->redirectToRoute('product_show', ['id' => $product->getId()]);
+            return $this->redirectToRoute('product_show', ['slug' => $product->getSlug()]);
         }
 
         return $this->render('products/show.html.twig', [

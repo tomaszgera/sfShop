@@ -60,9 +60,9 @@
                     <small>Dodany {{ comment.createdAt|date('d-m-Y') }} przez {{ comment.user }}</small>
                     <p>
 
-                        <a href="{{ path('vote_up', {'id': comment.id, 'productId': product.id}) }}" title="Up" class="glyphicon glyphicon-thumbs-up btn btn-default btn-mini"> {{ comment.nbVoteUp }} </a> | 
+                        <a href="{{ path('vote_up', {'id': comment.id, 'productId': product.id}) }}" title="Up" class="glyphicon glyphicon-thumbs-up btn btn-default btn-mini vote_up"> {{ comment.nbVoteUp }} </a> | 
 
-                        <a href="{{ path('vote_down', {'id': comment.id, 'productId': product.id}) }}" title="Down" class="glyphicon glyphicon-thumbs-down btn btn-default btn-mini"> {{ comment.nbVoteDown }} </a>
+                        <a href="{{ path('vote_down', {'id': comment.id, 'productId': product.id}) }}" title="Down" class="glyphicon glyphicon-thumbs-down btn btn-default btn-mini vote_down"> {{ comment.nbVoteDown }} </a>
 
                     </p>
                 </div>
